@@ -3,6 +3,14 @@
 All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] – 2026-11-23
+
+### Changed
+
+- New Firefox add-on ID `zammad-buddy@drw1337` for the listing on Firefox Add-ons. Firefox users of 1.0.0 need to
+  remove the old add-on and install this version; settings and Zammad instances must be added again.
+- No functional changes.
+
 ## [1.0.0] – 2026-11-23
 
 First public release for Chrome, Edge and Firefox.
@@ -45,4 +53,5 @@ First public release for Chrome, Edge and Firefox.
 - All markup is parsed in an inert document (`DOMParser`) and limited to what Zammad's server-side sanitizer
   keeps; links are restricted to `https:`, `http:`, `mailto:`, `tel:` and relative targets.
 
+[1.0.1]: https://github.com/drw1337/Zammad-Buddy/releases/tag/v1.0.1
 [1.0.0]: https://github.com/drw1337/Zammad-Buddy/releases/tag/v1.0.0

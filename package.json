@@ -1,6 +1,6 @@
 {
   "name": "buddy-for-zammad",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Browser extension for Zammad agents: formatting toolbar, advanced ticket search, email preview and paste format guard.",
   "author": "drw1337",

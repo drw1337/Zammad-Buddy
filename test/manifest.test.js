@@ -36,7 +36,7 @@ test('firefox metadata is ready for AMO signing', () => {
   const gecko = readJson('manifest.json').browser_specific_settings.gecko;
   assert.equal(
     gecko.id,
-    'buddy-for-zammad@drw1337',
+    'zammad-buddy@drw1337',
     'the ID must never change, or Firefox treats it as a new add-on'
   );
   assert.deepEqual(gecko.data_collection_permissions, { required: ['none'] });
