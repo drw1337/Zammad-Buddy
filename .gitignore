@@ -1,0 +1,14 @@
+# Build output (release packages are attached to GitHub releases)
+dist/
+*.zip
+*.xpi
+
+# Local notes, ideas and screenshots (never published)
+dev/
+
+# Editors & OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+node_modules/

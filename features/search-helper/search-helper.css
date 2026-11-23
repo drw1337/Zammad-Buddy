@@ -1,0 +1,679 @@
+/* ==========================================================================
+   Buddy for Zammad – Zammad-Native Advanced Ticket Search Styles
+   Scoped via `#zbSearchFlyout` in Light DOM so real `<input>` elements keep
+   100% native keyboard focus while Zammad's global CSS cannot bleed in.
+   Author: drw1337
+   ========================================================================== */
+
+button.zb-search-trigger-btn {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  height: 24px !important;
+  margin: 5px 0 2px 2px !important;
+  padding: 0 8px !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #b8bcc4 !important;
+  font-family: 'Fira Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 11.5px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease !important;
+}
+
+button.zb-search-trigger-btn svg {
+  flex: 0 0 auto !important;
+  opacity: 0.8 !important;
+}
+
+button.zb-search-trigger-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+}
+
+button.zb-search-trigger-btn.is-active {
+  background: rgba(50, 148, 214, 0.18) !important;
+  border-color: rgba(50, 148, 214, 0.55) !important;
+  color: #7cc4f5 !important;
+}
+
+/* ==========================================================================
+   Flyout container (light by default, `.is-dark` for Zammad dark mode)
+   ========================================================================== */
+
+#zbSearchFlyout {
+  color-scheme: light;
+
+  position: fixed !important;
+  z-index: 2147483000 !important;
+  width: 560px !important;
+  max-width: calc(100vw - 20px) !important;
+  max-height: calc(100vh - 24px) !important;
+  overflow-y: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: var(--zb-bg) !important;
+  color: var(--zb-text) !important;
+  border: 1px solid var(--zb-border) !important;
+  border-radius: 6px !important;
+  box-shadow: var(--zb-shadow) !important;
+  font-family: var(--zb-font) !important;
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+  text-align: left !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+#zbSearchFlyout.is-dark {
+  color-scheme: dark;
+}
+
+#zbSearchFlyout *,
+#zbSearchFlyout *::before,
+#zbSearchFlyout *::after {
+  box-sizing: border-box !important;
+  font-family: var(--zb-font) !important;
+}
+
+#zbSearchFlyout [hidden] {
+  display: none !important;
+}
+
+/* Header */
+#zbSearchFlyout .zb-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 9px 14px !important;
+  background: var(--zb-bg-chrome) !important;
+  border-bottom: 1px solid var(--zb-border-soft) !important;
+}
+
+#zbSearchFlyout .zb-head-title {
+  margin: 0 !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: var(--zb-text) !important;
+  letter-spacing: 0 !important;
+}
+
+#zbSearchFlyout button.zb-close-btn {
+  appearance: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--zb-text-muted) !important;
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 4px !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+#zbSearchFlyout button.zb-close-btn:hover {
+  background: var(--zb-bg-subtle) !important;
+  color: var(--zb-text) !important;
+}
+
+/* Title bar doubles as drag handle (core/draggable.js). */
+#zbSearchFlyout .zb-head.zb-drag-handle {
+  cursor: move !important;
+  touch-action: none !important;
+}
+
+#zbSearchFlyout .zb-head-actions {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+
+#zbSearchFlyout button.zb-icon-btn {
+  appearance: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 26px !important;
+  height: 24px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid transparent !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  color: var(--zb-text-muted) !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+#zbSearchFlyout button.zb-icon-btn:hover,
+#zbSearchFlyout button.zb-icon-btn.is-active {
+  background: var(--zb-bg-subtle) !important;
+  color: var(--zb-text) !important;
+}
+
+#zbSearchFlyout button.zb-icon-btn.is-active {
+  border-color: var(--zb-border) !important;
+}
+
+/* Search history (opens below the title bar) */
+#zbSearchFlyout .zb-history {
+  padding: 8px 14px 10px !important;
+  background: var(--zb-bg-chrome) !important;
+  border-bottom: 1px solid var(--zb-border-soft) !important;
+}
+
+#zbSearchFlyout .zb-history-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 4px !important;
+}
+
+#zbSearchFlyout ul.zb-history-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-height: 196px !important;
+  overflow-y: auto !important;
+}
+
+#zbSearchFlyout button.zb-history-item {
+  appearance: none !important;
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 4px 6px !important;
+  border: 0 !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  color: var(--zb-text) !important;
+  text-align: left !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+#zbSearchFlyout button.zb-history-item:hover,
+#zbSearchFlyout button.zb-history-item:focus-visible {
+  outline: none !important;
+  background: var(--zb-bg-subtle) !important;
+}
+
+#zbSearchFlyout .zb-history-query {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-family: var(--zb-font-mono) !important;
+  font-size: 11.5px !important;
+}
+
+#zbSearchFlyout .zb-history-when {
+  flex: 0 0 auto !important;
+  font-size: 11px !important;
+  color: var(--zb-text-muted) !important;
+}
+
+#zbSearchFlyout .zb-history-empty {
+  margin: 2px 0 0 !important;
+  font-size: 12px !important;
+  color: var(--zb-text-muted) !important;
+}
+
+/* Body */
+#zbSearchFlyout .zb-body {
+  padding: 12px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 11px !important;
+}
+
+/* Saved presets */
+#zbSearchFlyout .zb-fav-strip {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding-bottom: 4px !important;
+  border-bottom: 1px solid var(--zb-border-soft) !important;
+}
+
+#zbSearchFlyout .zb-fav-label {
+  font-size: 11.5px !important;
+  color: var(--zb-text-muted) !important;
+  margin-right: 2px !important;
+}
+
+#zbSearchFlyout .zb-fav-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: var(--zb-bg-subtle) !important;
+  border: 1px solid var(--zb-border) !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+}
+
+#zbSearchFlyout button.zb-fav-run {
+  appearance: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--zb-text) !important;
+  font-size: 11.5px !important;
+  font-weight: 500 !important;
+  padding: 2px 6px 2px 8px !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+#zbSearchFlyout button.zb-fav-run:hover {
+  color: var(--zb-accent) !important;
+}
+
+#zbSearchFlyout button.zb-fav-del {
+  appearance: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--zb-text-muted) !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  padding: 2px 6px 2px 3px !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+#zbSearchFlyout button.zb-fav-del:hover {
+  color: #d9383a !important;
+}
+
+/* Form groups and grids */
+#zbSearchFlyout .zb-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  margin: 0 !important;
+}
+
+#zbSearchFlyout .zb-group-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+}
+
+/* Time range: "based on" field + two labelled rows of presets */
+#zbSearchFlyout .zb-date-field {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+#zbSearchFlyout .zb-label.zb-label--muted {
+  font-weight: 400 !important;
+  color: var(--zb-text-muted) !important;
+}
+
+#zbSearchFlyout .zb-seg-line {
+  display: grid !important;
+  grid-template-columns: 62px 1fr !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+#zbSearchFlyout .zb-seg-caption {
+  font-size: 11.5px !important;
+  color: var(--zb-text-muted) !important;
+}
+
+#zbSearchFlyout .zb-label {
+  display: inline-block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--zb-text-label) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+
+#zbSearchFlyout .zb-row-search {
+  display: grid !important;
+  grid-template-columns: 1fr 124px !important;
+  gap: 6px !important;
+}
+
+#zbSearchFlyout .zb-row-two {
+  display: grid !important;
+  grid-template-columns: 1.2fr 0.9fr !important;
+  gap: 8px !important;
+}
+
+#zbSearchFlyout .zb-row-equal {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+}
+
+/* Inputs and selects hardened against Zammad's global form CSS */
+#zbSearchFlyout input.zb-field,
+#zbSearchFlyout select.zb-field {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  margin: 0 !important;
+  padding: 0 8px !important;
+  background-color: var(--zb-bg-input) !important;
+  color: var(--zb-text) !important;
+  border: 1px solid var(--zb-border-input) !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 28px !important;
+  outline: none !important;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease !important;
+}
+
+#zbSearchFlyout input.zb-field::placeholder {
+  color: var(--zb-text-muted) !important;
+  opacity: 1 !important;
+}
+
+#zbSearchFlyout input.zb-field:focus,
+#zbSearchFlyout select.zb-field:focus {
+  border-color: var(--zb-accent) !important;
+  box-shadow: var(--zb-focus-ring) !important;
+}
+
+#zbSearchFlyout select.zb-field {
+  padding-right: 24px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12' fill='none' stroke='%23767d87' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 7px center !important;
+  cursor: pointer !important;
+}
+
+#zbSearchFlyout select.zb-field--inline {
+  display: inline-block !important;
+  width: auto !important;
+  height: 23px !important;
+  min-height: 23px !important;
+  line-height: 21px !important;
+  font-size: 11.5px !important;
+  padding: 0 22px 0 7px !important;
+  background-color: var(--zb-bg-subtle) !important;
+  border-color: var(--zb-border) !important;
+}
+
+/* Plain filter buttons (4px radius, like Zammad) */
+#zbSearchFlyout .zb-seg-wrap {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+}
+
+#zbSearchFlyout button.zb-seg-btn {
+  appearance: none !important;
+  border: 1px solid var(--zb-border) !important;
+  background: var(--zb-bg-subtle) !important;
+  color: var(--zb-text-label) !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  padding: 4px 8px !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition:
+    background-color 0.1s ease,
+    border-color 0.1s ease,
+    color 0.1s ease !important;
+}
+
+#zbSearchFlyout button.zb-seg-btn:hover {
+  border-color: var(--zb-border-input) !important;
+  color: var(--zb-text) !important;
+}
+
+#zbSearchFlyout button.zb-seg-btn.is-active {
+  background: var(--zb-accent-soft) !important;
+  border-color: var(--zb-accent-border) !important;
+  color: var(--zb-accent-text) !important;
+  font-weight: 600 !important;
+}
+
+#zbSearchFlyout .zb-custom-dates {
+  margin-top: 4px !important;
+}
+
+/* Collapsible extra filters */
+#zbSearchFlyout details.zb-more {
+  border: 1px solid var(--zb-border-soft) !important;
+  background: var(--zb-bg-chrome) !important;
+  border-radius: 4px !important;
+  margin: 0 !important;
+}
+
+#zbSearchFlyout summary.zb-more-summary {
+  list-style: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 6px 9px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--zb-text-label) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+}
+
+#zbSearchFlyout summary.zb-more-summary::-webkit-details-marker {
+  display: none !important;
+}
+
+#zbSearchFlyout summary.zb-more-summary:hover {
+  color: var(--zb-text) !important;
+}
+
+#zbSearchFlyout .zb-more-left {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+}
+
+#zbSearchFlyout .zb-chevron {
+  transition: transform 0.14s ease !important;
+  color: var(--zb-text-muted) !important;
+}
+
+#zbSearchFlyout details.zb-more[open] .zb-chevron {
+  transform: rotate(90deg) !important;
+  color: var(--zb-accent) !important;
+}
+
+#zbSearchFlyout .zb-more-badge {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 1px 6px !important;
+  border-radius: 3px !important;
+  background: var(--zb-accent-soft) !important;
+  color: var(--zb-accent-text) !important;
+  border: 1px solid var(--zb-accent-border) !important;
+}
+
+#zbSearchFlyout .zb-more-body {
+  padding: 8px 9px 9px !important;
+  border-top: 1px solid var(--zb-border-soft) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+#zbSearchFlyout .zb-combo-row {
+  display: grid !important;
+  grid-template-columns: 92px 1fr !important;
+  gap: 5px !important;
+}
+
+#zbSearchFlyout .zb-combo-row--agent {
+  grid-template-columns: 86px 1fr !important;
+}
+
+/* Optional syntax drawer */
+#zbSearchFlyout .zb-syntax-drawer {
+  padding: 8px 14px !important;
+  background: var(--zb-bg-chrome) !important;
+  border-top: 1px solid var(--zb-border-soft) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
+
+#zbSearchFlyout .zb-syntax-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+#zbSearchFlyout .zb-syntax-actions {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+#zbSearchFlyout input.zb-query-field {
+  font-family: var(--zb-font-mono) !important;
+  font-size: 11.5px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+}
+
+#zbSearchFlyout .zb-save-row {
+  display: grid !important;
+  grid-template-columns: 1fr auto !important;
+  gap: 6px !important;
+  margin-top: 2px !important;
+}
+
+/* Dialog footer */
+#zbSearchFlyout .zb-foot {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  padding: 9px 14px !important;
+  background: var(--zb-bg-chrome) !important;
+  border-top: 1px solid var(--zb-border-soft) !important;
+}
+
+#zbSearchFlyout button.zb-text-link {
+  appearance: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--zb-text-muted) !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  padding: 2px 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+#zbSearchFlyout button.zb-text-link:hover,
+#zbSearchFlyout button.zb-text-link.is-open {
+  color: var(--zb-accent) !important;
+}
+
+#zbSearchFlyout .zb-foot-right {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+}
+
+#zbSearchFlyout button.zb-btn-sec {
+  appearance: none !important;
+  height: 30px !important;
+  padding: 0 11px !important;
+  margin: 0 !important;
+  border: 1px solid var(--zb-border-input) !important;
+  border-radius: 4px !important;
+  background: var(--zb-bg-input) !important;
+  color: var(--zb-text-label) !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+}
+
+#zbSearchFlyout button.zb-btn-sec:hover {
+  border-color: var(--zb-text-muted) !important;
+  color: var(--zb-text) !important;
+}
+
+#zbSearchFlyout button.zb-btn-primary {
+  appearance: none !important;
+  height: 30px !important;
+  padding: 0 16px !important;
+  margin: 0 !important;
+  border: 1px solid var(--zb-accent) !important;
+  border-radius: 4px !important;
+  background: var(--zb-accent) !important;
+  color: #ffffff !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition:
+    background-color 0.12s ease,
+    opacity 0.12s ease !important;
+}
+
+#zbSearchFlyout button.zb-btn-primary:hover:not(:disabled) {
+  background: var(--zb-accent-hover) !important;
+  border-color: var(--zb-accent-hover) !important;
+}
+
+#zbSearchFlyout button.zb-btn-primary:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+}
+
+/* Must stay at the end of the file so `[hidden]` beats every `display: flex/grid !important` */
+#zbSearchFlyout [hidden],
+#zbSearchFlyout div[hidden],
+#zbSearchFlyout span[hidden],
+#zbSearchFlyout p[hidden],
+#zbSearchFlyout button[hidden],
+#zbSearchFlyout button.zb-icon-btn[hidden] {
+  display: none !important;
+}

@@ -1,0 +1,89 @@
+/* ==========================================================================
+   Buddy for Zammad – Shared Design Tokens
+   One palette for every surface: format bar, formatting toolbar, popovers,
+   email preview, search flyout and the extension popup. In Zammad the dark
+   variant follows Zammad's theme; the popup follows the browser's color scheme.
+   Author: drw1337
+   ========================================================================== */
+
+.zb-format-bar,
+.zb-wysiwyg-shell,
+.zb-email-preview,
+#zbSearchFlyout,
+.zb-popup {
+  --zb-font: 'Fira Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --zb-font-mono: Consolas, 'SFMono-Regular', Menlo, Monaco, monospace;
+
+  --zb-bg: #ffffff;
+  --zb-bg-chrome: #f6f7f9;
+  --zb-bg-subtle: #f2f4f7;
+  --zb-bg-input: #ffffff;
+  --zb-bg-hover: rgba(15, 23, 34, 0.06);
+  --zb-border: #d0d5dd;
+  --zb-border-soft: #e4e7ec;
+  --zb-border-input: #c4cad3;
+  --zb-text: #1f2328;
+  --zb-text-label: #4d545e;
+  --zb-text-muted: #767d87;
+
+  --zb-accent: #2b86c5;
+  --zb-accent-hover: #2273ac;
+  --zb-accent-soft: #eaf4fc;
+  --zb-accent-border: #78b6e3;
+  --zb-accent-text: #185c8c;
+  --zb-focus-ring: 0 0 0 2px rgba(43, 134, 197, 0.18);
+
+  --zb-warn-bg: rgba(229, 152, 0, 0.1);
+  --zb-warn-border: rgba(229, 152, 0, 0.4);
+  --zb-warn-text: #8a5a00;
+  --zb-ok-bg: rgba(46, 160, 67, 0.1);
+  --zb-ok-border: rgba(46, 160, 67, 0.35);
+  --zb-ok-text: #1f7a34;
+  --zb-danger: #c4312f;
+  --zb-danger-border: rgba(196, 49, 47, 0.4);
+
+  --zb-shadow: 0 12px 32px rgba(15, 23, 34, 0.18), 0 2px 6px rgba(15, 23, 34, 0.08);
+}
+
+[data-theme='dark'] .zb-format-bar,
+[data-theme='dark'] .zb-wysiwyg-shell,
+[data-theme='dark'] .zb-email-preview,
+#zbSearchFlyout.is-dark,
+[data-theme='dark'] .zb-popup {
+  --zb-bg: #262729;
+  --zb-bg-chrome: #1f2022;
+  --zb-bg-subtle: #2f3134;
+  --zb-bg-input: #1d1e20;
+  --zb-bg-hover: rgba(255, 255, 255, 0.08);
+  --zb-border: #3d4045;
+  --zb-border-soft: #33353a;
+  --zb-border-input: #44474d;
+  --zb-text: #e6e8eb;
+  --zb-text-label: #b4b8bf;
+  --zb-text-muted: #858a93;
+
+  --zb-accent: #3294d6;
+  --zb-accent-hover: #2781be;
+  --zb-accent-soft: rgba(50, 148, 214, 0.18);
+  --zb-accent-border: #3c8ec7;
+  --zb-accent-text: #86caf7;
+  --zb-focus-ring: 0 0 0 2px rgba(50, 148, 214, 0.28);
+
+  --zb-warn-bg: rgba(229, 152, 0, 0.13);
+  --zb-warn-border: rgba(229, 152, 0, 0.42);
+  --zb-warn-text: #f0b54a;
+  --zb-ok-bg: rgba(46, 160, 67, 0.15);
+  --zb-ok-border: rgba(46, 160, 67, 0.4);
+  --zb-ok-text: #6fcf87;
+  --zb-danger: #f08583;
+  --zb-danger-border: rgba(240, 133, 131, 0.4);
+
+  --zb-shadow: 0 16px 38px rgba(0, 0, 0, 0.5);
+}
+
+/* While a window is dragged (core/draggable.js): no text selection, move cursor everywhere. */
+html.zb-is-dragging,
+html.zb-is-dragging * {
+  user-select: none !important;
+  cursor: move !important;
+}

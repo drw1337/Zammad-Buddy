@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <title>Buddy for Zammad – Offline Editor &amp; Search Sandbox</title>
+    <link rel="stylesheet" href="../core/theme.css" />
+    <link rel="stylesheet" href="../features/format-guard/format-guard.css" />
+    <link rel="stylesheet" href="../features/wysiwyg/wysiwyg.css" />
+    <link rel="stylesheet" href="../features/search-helper/search-helper.css" />
+    <style>
+      :root {
+        --bg-page: #191c21;
+        --bg-panel: #252830;
+        --border-panel: #363b46;
+        --text-normal: #dbdcde;
+        --text-muted: #9097a6;
+      }
+
+      html[data-theme='light'] {
+        --bg-page: #f3f4f6;
+        --bg-panel: #ffffff;
+        --border-panel: #d1d5db;
+        --text-normal: #1f2937;
+        --text-muted: #6b7280;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 20px 24px;
+        background: var(--bg-page);
+        color: var(--text-normal);
+        font-family:
+          'Segoe UI Variable Text',
+          'Segoe UI',
+          -apple-system,
+          BlinkMacSystemFont,
+          system-ui,
+          sans-serif;
+        font-size: 14px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 18px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border-panel);
+      }
+
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .topbar h1 {
+        margin: 0;
+        font-size: 16.5px;
+        font-weight: 650;
+      }
+
+      .badge-offline {
+        background: rgba(34, 197, 94, 0.14);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.35);
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 11.5px;
+        font-weight: 600;
+      }
+
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .toolbar button {
+        background: var(--bg-panel);
+        color: var(--text-normal);
+        border: 1px solid var(--border-panel);
+        padding: 6px 11px;
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 12.5px;
+        cursor: pointer;
+      }
+
+      .toolbar button:hover {
+        border-color: #f5b800;
+      }
+
+      .copy-source-box {
+        background: #ffffff;
+        color: #111827;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin-bottom: 18px;
+      }
+
+      .copy-source-label {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 6px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        align-items: start;
+      }
+
+      @media (max-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .panel-title {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+      }
+
+      .article-add.is-open .textBubble {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-panel);
+        border-radius: 4px;
+      }
+
+      .article-add.is-open .textBubble.is-internal {
+        border-style: dashed;
+        border-color: #d99b00;
+      }
+
+      .richtext-content[contenteditable='true'] {
+        min-height: 270px;
+        padding: 12px 14px 24px;
+        outline: none;
+        line-height: 1.5;
+        color: var(--text-normal);
+      }
+
+      .richtext-content a {
+        color: #38bdf8;
+      }
+
+      /* Zammad's exact dark-mode CSS rule from app/assets/stylesheets/zammad.scss */
+      [data-theme='dark'] .richtext-content [style*='background'] {
+        background: none !important;
+      }
+      [data-theme='dark'] .richtext-content [style*='color'] {
+        color: inherit !important;
+      }
+
+      .mail-client-preview {
+        background: #ffffff;
+        color: #000000;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+        padding: 16px 18px;
+        min-height: 300px;
+        font-family: Verdana, Arial, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.45;
+      }
+
+      .mail-client-preview a {
+        color: #0563c1;
+        text-decoration: underline;
+      }
+
+      .raw-html {
+        margin-top: 12px;
+        background: #121418;
+        color: #93c5fd;
+        border: 1px solid #2e323b;
+        border-radius: 4px;
+        padding: 10px 12px;
+        font-family: Consolas, monospace;
+        font-size: 11.5px;
+        white-space: pre-wrap;
+        word-break: break-all;
+        max-height: 190px;
+        overflow: auto;
+      }
+
+      /* Simulates Zammad's aggressive global form CSS to test style isolation */
+      body input[type='text']:not(#global-search) {
+        background: #ffffff;
+        color: #111111;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="topbar-left" style="gap: 18px">
+        <div
+          class="navigation"
+          style="
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background: #1e2127;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #303540;
+          "
+        >
+          <div class="search" style="display: flex; flex-direction: column; align-items: flex-start">
+            <input
+              id="global-search"
+              type="text"
+              placeholder="🔍 Zammad search…"
+              style="
+                background: rgba(255, 255, 255, 0.06);
+                color: var(--text-normal);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 999px;
+                padding: 5px 12px;
+                font-size: 12.5px;
+                width: 210px;
+              "
+            />
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px">
+          <img src="../icons/icon-48.png" width="28" height="28" alt="" />
+          <div>
+            <h1>Buddy for Zammad – Offline Sandbox</h1>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px">
+              Reproduces Zammad's dark-mode CSS &amp; sidebar search locally without any network calls.
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="badge-offline">100% Local Sandbox</span>
+    </div>
+
+    <div class="copy-source-box">
+      <div class="copy-source-label">
+        Sample snippet to copy &amp; paste (Ctrl+C / Ctrl+V) into the editor below:
+      </div>
+      <div id="copySource">
+        <span style="color: #159a8c; font-family: 'Calibri', sans-serif; font-size: 11pt"
+          >Alex, thank you for your quick confirmation! The migration of <b>acme-cloud.example</b> completed
+          yesterday.</span
+        >
+        <span style="background-color: #fef08a; color: #b91c1c; font-family: Georgia, serif; font-size: 15pt"
+          >Regarding <b>portal.acme.example</b>, please add
+          <a href="mailto:ops@acme.example" style="color: #9333ea">ops@acme.example</a> to the technical
+          contact.</span
+        >
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button type="button" id="btnLoadBrokenCase">1. Load hidden-color sample</button>
+      <button type="button" id="btnSimulateCleanPaste">2. Simulate Ctrl+V with Auto-clean</button>
+      <button type="button" id="btnResetClean">3. Load clean draft with signature</button>
+      <button type="button" id="btnToggleVisibility">Switch: Public Reply ↔ Internal Note</button>
+      <button type="button" id="btnToggleLang">Switch language (EN / DE)</button>
+      <button type="button" id="btnToggleTheme">Toggle Zammad Dark / Light theme</button>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="panel-title">Zammad Editor (with Buddy for Zammad)</div>
+        <div class="article-add is-open" id="mockArticleContainer">
+          <input type="hidden" name="internal" id="mockInternalInput" value="false" />
+          <input type="hidden" name="type" id="mockTypeInput" value="email" />
+          <div class="textBubble js-writeArea" id="mockTextBubble">
+            <div class="richtext form-control">
+              <div
+                id="zammadEditor"
+                class="richtext-content js-textarea"
+                data-name="body"
+                contenteditable="true"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel-title">Customer Email Client View (light background, actual outgoing styles)</div>
+        <div id="mailClientPreview" class="mail-client-preview"></div>
+        <div class="panel-title" style="margin-top: 14px">
+          Outgoing HTML (<code>[data-name="body"].innerHTML</code>)
+        </div>
+        <div id="rawHtmlView" class="raw-html"></div>
+      </div>
+    </div>
+
+    <script src="../core/locales/en.js"></script>
+    <script src="../core/locales/de.js"></script>
+    <script src="../core/i18n.js"></script>
+    <script src="../core/storage.js"></script>
+    <script src="../core/search-query/date-range.js"></script>
+    <script src="../core/search-query/clauses.js"></script>
+    <script src="../core/search-query.js"></script>
+    <script src="../core/zammad-dom.js"></script>
+    <script src="../core/editor-context.js"></script>
+    <script src="../core/dom-observer.js"></script>
+    <script src="../core/draggable.js"></script>
+    <script src="../core/safe-html.js"></script>
+    <script src="../features/format-guard/sanitizer/rules.js"></script>
+    <script src="../features/format-guard/sanitizer/detector.js"></script>
+    <script src="../features/format-guard/sanitizer/cleaner.js"></script>
+    <script src="../features/format-guard/sanitizer.js"></script>
+    <script src="../features/format-guard/paste.js"></script>
+    <script src="../features/format-guard/status-bar.js"></script>
+    <script src="../features/format-guard/index.js"></script>
+    <script src="../features/wysiwyg/editor/dom.js"></script>
+    <script src="../features/wysiwyg/editor/code-highlight.js"></script>
+    <script src="../features/wysiwyg/editor/emoji-catalog.js"></script>
+    <script src="../features/wysiwyg/editor/links.js"></script>
+    <script src="../features/wysiwyg/editor/note-highlight.js"></script>
+    <script src="../features/wysiwyg/editor/blocks.js"></script>
+    <script src="../features/wysiwyg/editor/lists.js"></script>
+    <script src="../features/wysiwyg/editor/tables.js"></script>
+    <script src="../features/wysiwyg/editor/formatting.js"></script>
+    <script src="../features/wysiwyg/editor/preview-sanitizer.js"></script>
+    <script src="../features/wysiwyg/commands.js"></script>
+    <script src="../features/wysiwyg/ui/icons.js"></script>
+    <script src="../features/wysiwyg/ui/popovers/frame.js"></script>
+    <script src="../features/wysiwyg/ui/popovers/code.js"></script>
+    <script src="../features/wysiwyg/ui/popovers/link.js"></script>
+    <script src="../features/wysiwyg/ui/popovers/emoji.js"></script>
+    <script src="../features/wysiwyg/ui/popovers/table.js"></script>
+    <script src="../features/wysiwyg/ui/popovers/highlight.js"></script>
+    <script src="../features/wysiwyg/ui/preview.js"></script>
+    <script src="../features/wysiwyg/index.js"></script>
+    <script src="../features/search-helper/panel/kit.js"></script>
+    <script src="../features/search-helper/panel/filters.js"></script>
+    <script src="../features/search-helper/panel/presets.js"></script>
+    <script src="../features/search-helper/panel/syntax-drawer.js"></script>
+    <script src="../features/search-helper/panel/history.js"></script>
+    <script src="../features/search-helper/search-panel.js"></script>
+    <script src="../features/search-helper/index.js"></script>
+    <script src="../content.js"></script>
+    <script>
+      (function () {
+        const editor = document.getElementById('zammadEditor');
+        const mailClientPreview = document.getElementById('mailClientPreview');
+        const rawHtmlView = document.getElementById('rawHtmlView');
+
+        const SIGNATURE_HTML =
+          '<div data-signature="true" data-signature-id="1">' +
+          'Best regards,<br>' +
+          'Support Team<br>' +
+          '<a href="mailto:support@example.com">support@example.com</a><br>' +
+          '<span style="color: #666666;">Example Corp &middot; Sample Street 10</span>' +
+          '</div>';
+
+        const HIDDEN_STYLE_SAMPLE_HTML =
+          '<div>Hello <span style="color: #159a8c; font-family: Calibri, sans-serif; font-size: 11pt;">Alex,</span></div>' +
+          '<div><br></div>' +
+          '<div><span style="color: #159a8c; font-family: Calibri, sans-serif;">thank you very much!</span></div>' +
+          '<div><br></div>' +
+          '<div><span style="color: #159a8c;">The migration of <b>acme-cloud.example</b> completed yesterday as well.</span></div>' +
+          '<div><br></div>' +
+          '<div><span style="color: #159a8c;">Regarding </span> <b>portal.acme.example,</b> please add <a href="mailto:ops@acme.example">ops@acme.example</a> to the technical contact.</div>' +
+          '<div><br></div>' +
+          '<div>If you have any questions, feel free to reach out.</div>' +
+          '<div><br></div>' +
+          SIGNATURE_HTML;
+
+        const CLEAN_DRAFT_HTML =
+          '<div>Hello Alex,</div>' + '<div><br></div>' + '<div><br></div>' + SIGNATURE_HTML;
+
+        function syncPreview() {
+          mailClientPreview.innerHTML = editor.innerHTML;
+          rawHtmlView.textContent = editor.innerHTML;
+        }
+
+        editor.innerHTML = HIDDEN_STYLE_SAMPLE_HTML;
+        syncPreview();
+
+        editor.addEventListener('input', syncPreview);
+        const obs = new MutationObserver(syncPreview);
+        obs.observe(editor, { childList: true, subtree: true, attributes: true, characterData: true });
+
+        document.getElementById('btnLoadBrokenCase').addEventListener('click', () => {
+          editor.innerHTML = HIDDEN_STYLE_SAMPLE_HTML;
+          editor.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+
+        document.getElementById('btnResetClean').addEventListener('click', () => {
+          editor.innerHTML = CLEAN_DRAFT_HTML;
+          editor.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+
+        document.getElementById('btnSimulateCleanPaste').addEventListener('click', () => {
+          editor.innerHTML = CLEAN_DRAFT_HTML;
+          editor.focus();
+          const secondDiv = editor.children[1];
+          const range = document.createRange();
+          range.selectNodeContents(secondDiv);
+          range.collapse(true);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+
+          const sourceHtml = document.getElementById('copySource').innerHTML;
+          const sourceText = document.getElementById('copySource').innerText;
+
+          const dt = new DataTransfer();
+          dt.setData('text/html', sourceHtml);
+          dt.setData('text/plain', sourceText);
+          const pasteEv = new ClipboardEvent('paste', {
+            bubbles: true,
+            cancelable: true,
+            clipboardData: dt,
+          });
+          editor.dispatchEvent(pasteEv);
+        });
+
+        document.getElementById('btnToggleVisibility').addEventListener('click', () => {
+          const internalInput = document.getElementById('mockInternalInput');
+          const typeInput = document.getElementById('mockTypeInput');
+          const bubble = document.getElementById('mockTextBubble');
+          const nextInternal = internalInput.value !== 'true';
+          internalInput.value = nextInternal ? 'true' : 'false';
+          internalInput.setAttribute('value', nextInternal ? 'true' : 'false');
+          typeInput.value = nextInternal ? 'note' : 'email';
+          bubble.classList.toggle('is-internal', nextInternal);
+        });
+
+        document.getElementById('btnToggleLang').addEventListener('click', async () => {
+          const cur = await window.ZammadBuddy.storage.loadSettings();
+          const nextLang = cur.language === 'de' ? 'en' : 'de';
+          await window.ZammadBuddy.storage.saveSettings({ language: nextLang });
+        });
+
+        document.getElementById('btnToggleTheme').addEventListener('click', () => {
+          const html = document.documentElement;
+          html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        });
+
+        // Simulates Zammad's global shortcut and focus-trap handlers (which pulled focus to #global-search with Shadow DOM)
+        window.addEventListener(
+          'keydown',
+          (e) => {
+            const t = e.target;
+            const isRealField =
+              t && t.matches && t.matches('input, textarea, select, [contenteditable="true"]');
+            if (!isRealField && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+              const gs = document.getElementById('global-search');
+              if (gs) gs.focus();
+            }
+          },
+          true
+        );
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 's' && !e.ctrlKey && !e.metaKey) {
+            const gs = document.getElementById('global-search');
+            if (gs) gs.focus();
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

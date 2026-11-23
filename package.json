@@ -1,0 +1,33 @@
+{
+  "name": "buddy-for-zammad",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser extension for Zammad agents: formatting toolbar, advanced ticket search, email preview and paste format guard.",
+  "author": "drw1337",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drw1337/Zammad-Buddy.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"test/**/*.test.js\"",
+    "lint": "eslint .",
+    "lint:firefox": "npm run build && web-ext lint --source-dir=dist/firefox",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "build": "node scripts/build.js",
+    "package": "node scripts/package.js",
+    "sign:firefox": "npm run build && web-ext sign --channel=unlisted --source-dir=dist/firefox --artifacts-dir=dist/signed",
+    "check": "npm run lint && npm run format:check && npm test && npm run lint:firefox"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.1",
+    "web-ext": "^10.8.0"
+  }
+}
